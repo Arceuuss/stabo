@@ -24,10 +24,15 @@ jobs:
       - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
         run: yarn install --frozen-lockfile
       
-      - name: Run tests
-        run: yarn test
+      - name: Run tests and coverage
+        run: yarn test && yarn test:coverage
       
-        ## configure cash for gradle : will help to reduce build time
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env: 
+           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        
+           ## configure cash for gradle : will help to reduce build time
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
         with:

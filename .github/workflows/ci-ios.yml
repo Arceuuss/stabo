@@ -3,7 +3,7 @@ on: pull_request
 
 jobs:
   ios-build:
-    name: IOS Production Build
+    name: IOS  Build
     runs-on: macOS-latest
 
     steps:
@@ -19,8 +19,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --network-timeout 300000
       
-      - name: Run tests
-        run: yarn test
+      - name: Run tests and coverage
+        run: yarn test && yarn test:coverage
+      
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env: 
+           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
