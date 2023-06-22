@@ -8,9 +8,8 @@ import {
   Text,
 } from 'react-native';
 import {handlePress} from './helpers/api';
-import * as Progress from 'react-native-progress';
 import {styles} from './styles/App';
-
+import * as Progress from 'react-native-progress';
 export default function App() {
   const [input, setInput] = useState<string>('');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
@@ -39,7 +38,8 @@ export default function App() {
       </View>
       <View style={styles.imageContainer}>
         {isLoading ? (
-          <Progress.Circle size={30} indeterminate={true} />
+          // <Text style={styles.descriptionText}>Generating...</Text>
+          <Progress.Bar progress={0.3} width={200} />
         ) : image ? (
           <Image
             source={{uri: image.toString()}}
