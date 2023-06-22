@@ -75,6 +75,9 @@ jobs:
   ios-build:
     name: IOS  Build
     runs-on: macOS-latest
+    defaults:
+      run:
+        working-directory: ios
 
     steps:
       #checkout the code
@@ -127,7 +130,7 @@ jobs:
           team-id: ${{ secrets.IOS_TEAM_ID }}
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           workspace-path: ios/stabo.xcworkspace
-          scheme: MyApp
+          scheme: stabo
       #upload generated ipa
       - uses: actions/upload-artifact@v3
         with:
