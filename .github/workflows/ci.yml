@@ -1,0 +1,135 @@
+name: Test Builds ## name of the workflow
+on: pull_request ## trigger the workflow on pull request
+
+jobs:
+  
+  #<<android app build>>
+  android-build:
+    name: Android Build
+    runs-on: ubuntu-latest 
+
+    steps:
+      #checkout the code
+      - name: Check out Git repository 
+        uses: actions/checkout@v2
+      #setup java
+      - name: Set up our JDK environment 
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 11.0.19
+      #setup node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      #install dependencies
+      - name: Install dependencies 
+        run: yarn install --frozen-lockfile
+      #run tests and coverage
+      - name: Run tests and coverage
+        run: yarn test && yarn test:coverage
+      #upload coverage reports to codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env: 
+           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      #gradle setup
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
+
+      #build android app
+      - name: Generate App APK
+        run: |
+          cd android && ./gradlew assembleRelease --no-daemon
+
+      ## sign generated apk
+      - name: Sign APK
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      #upload generated apk
+      - uses: actions/upload-artifact@v3
+        with:
+         name: android-build-release
+         path:  android/app/build/outputs/apk/release
+  
+  # <<ios app build>>
+  ios-build:
+    name: IOS  Build
+    runs-on: macOS-latest
+
+    steps:
+      #checkout the code
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      #setup node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      #install dependencies
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --network-timeout 300000
+      #run tests and coverage
+      - name: Run tests and coverage
+        run: yarn test && yarn test:coverage
+      #upload coverage reports to codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env: 
+           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      #setup ruby
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
+      #install cocoapods and retrive from cache
+      - name: Restore Pods cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - name: Install Pods
+        run: cd ios && pod install --repo-update && cd ..
+      #build ios app
+      - name: Build IOS App
+        uses: yukiarrr/ios-build-action@v1.4.0
+        with:
+          project-path: ios/stabo.xcodeproj
+          p12-base64: ${{ secrets.IOS_P12_BASE64 }}
+          mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
+          code-signing-identity: 'iPhone Distribution'
+          team-id: ${{ secrets.IOS_TEAM_ID }}
+          certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          workspace-path: ios/stabo.xcworkspace
+          scheme: MyApp
+      #upload generated ipa
+      - uses: actions/upload-artifact@v3
+        with:
+         name: android-build-release
+         path:  ./output.ipa
