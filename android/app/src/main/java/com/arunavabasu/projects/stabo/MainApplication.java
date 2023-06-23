@@ -1,4 +1,4 @@
-package com.stabo;
+package com.arunavabasu.projects.stabo;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -93,13 +93,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.stabo"
+    namespace "com.arunavabasu.projects.stabo"
     defaultConfig {
-        applicationId "com.stabo"
+        applicationId "com.arunavabasu.projects.stabo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.0.1"
     }
     signingConfigs {
         release {
@@ -128,18 +128,19 @@ android {
             keyPassword 'android'
         }
     }
-    buildTypes {
+   buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
