@@ -1,4 +1,4 @@
-package com.stabo;
+package com.arunavabasu.projects.stabo;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
