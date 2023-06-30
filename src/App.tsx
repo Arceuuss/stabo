@@ -14,8 +14,10 @@ export default function App() {
   const [input, setInput] = useState<string>('');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0.3);
+
   const onPress = () => {
-    handlePress({input, setImage, setIsLoading});
+    handlePress({input, setImage, setIsLoading, setProgress});
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -39,7 +41,7 @@ export default function App() {
       <View style={styles.imageContainer}>
         {isLoading ? (
           // <Text style={styles.descriptionText}>Generating...</Text>
-          <Progress.Bar progress={0.3} width={200} />
+          <Progress.Bar progress={progress} />
         ) : image ? (
           <Image
             source={{uri: image.toString()}}
