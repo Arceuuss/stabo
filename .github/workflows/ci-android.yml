@@ -68,6 +68,10 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
          name: android-build-release
+<<<<<<< HEAD:.github/workflows/ci.yml
          path:  android/app/build/outputs/apk/release
   
   
+=======
+         path:  android/app/build/outputs/apk/release
+>>>>>>> fix_ci:.github/workflows/ci-android.yml
