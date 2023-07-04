@@ -63,6 +63,7 @@ jobs:
           workspace-path: ios/stabo.xcworkspace
           output-path: "output.ipa"
 
+
     #   - name: 'Upload app to TestFlight'
     #     uses: apple-actions/upload-testflight-build@v1
     #     with:
