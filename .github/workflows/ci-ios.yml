@@ -62,6 +62,7 @@ jobs:
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           workspace-path: ios/stabo.xcworkspace
           output-path: "output.ipa"
+          build-sdk: "iOS 12.4"
 
     #   - name: 'Upload app to TestFlight'
     #     uses: apple-actions/upload-testflight-build@v1
