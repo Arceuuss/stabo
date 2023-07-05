@@ -1,5 +1,5 @@
-name: Android test build  ## name of the workflow
-on: pull_request ## trigger the workflow on pull request
+name: Android test build 
+on: pull_request 
 
 jobs:
   
@@ -50,7 +50,6 @@ jobs:
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
-      #build android app
       - name: Generate App APK
         run: |
           cd android && ./gradlew assembleRelease --no-daemon

@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import {handlePress} from './helpers/api';
 import {styles} from './styles/App';
-import * as Progress from 'react-native-progress';
+import {Bar} from 'react-native-progress';
+
 export default function App() {
   const [input, setInput] = useState<string>('');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
@@ -40,8 +41,7 @@ export default function App() {
       </View>
       <View style={styles.imageContainer}>
         {isLoading ? (
-          // <Text style={styles.descriptionText}>Generating...</Text>
-          <Progress.Bar progress={progress} />
+          <Bar progress={progress} />
         ) : image ? (
           <Image
             source={{uri: image.toString()}}
