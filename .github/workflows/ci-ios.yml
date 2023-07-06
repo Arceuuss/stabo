@@ -64,5 +64,6 @@ jobs:
           team-id: ${{ secrets.IOS_TEAM_ID }}
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           workspace-path: ios/stabo.xcworkspace
+          scheme: "stabo"
           output-path: "output.ipa"
 

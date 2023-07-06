@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {handlePress} from './helpers/api';
 import {styles} from './styles/App';
-import {Bar} from 'react-native-progress';
+import * as Progress from 'react-native-progress';
 
-export default function App() {
+export const App: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -41,7 +41,7 @@ export default function App() {
       </View>
       <View style={styles.imageContainer}>
         {isLoading ? (
-          <Bar progress={progress} />
+          <Progress.Bar progress={progress} />
         ) : image ? (
           <Image
             source={{uri: image.toString()}}
@@ -52,4 +52,4 @@ export default function App() {
       </View>
     </SafeAreaView>
   );
-}
+};
