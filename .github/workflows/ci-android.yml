@@ -11,34 +11,35 @@ jobs:
       - name: Check out Git repository 
         uses: actions/checkout@v2
 
+      # setup java  
       - name: Set up our JDK environment 
         uses: actions/setup-java@v1.4.3
         with:
           java-version: 11.0.19
-
+      # setup nodejs 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
-
+      # install dependencies
       - name: Install dependencies 
         run: yarn install --frozen-lockfile
-
+      # run tests and coverage 
       - name: Run tests and coverage
         run: yarn test && yarn test:coverage
-
+      # upload coverage reports to codecov
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env: 
            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
+      # get grade wrapper from cache
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
+      #cache gradle dependencies
       - name: Cache Gradle Dependencies
         uses: actions/cache@v2
         with:
@@ -46,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
-      
+      #make gradlew executable
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
