@@ -1,55 +1,41 @@
-import React, {useState} from 'react';
-import {
-  View,
-  TextInput,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import {handlePress} from './helpers/api';
-import {styles} from './styles/App';
-import * as Progress from 'react-native-progress';
-export default function App() {
-  const [input, setInput] = useState<string>('');
-  const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0.3);
+const Stack = createNativeStackNavigator();
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 
-  const onPress = () => {
-    handlePress({input, setImage, setIsLoading, setProgress});
-  };
+import OnboardingS1 from './screens/OnboardingS1';
+import OnboardingS2 from './screens/OnboardingS2';
+import OnboardingS3 from './screens/OnboardingS3';
+
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {View, Text, Pressable, TouchableOpacity} from 'react-native';
+
+const App = () => {
+  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.descriptionText}>Pls type your prompt</Text>
-        <View style={styles.generateContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter the text"
-            value={input}
-            onChangeText={setInput}
-          />
-          <TouchableOpacity
-            disabled={isLoading}
-            onPress={onPress}
-            style={styles.button}>
-            <Text style={styles.buttonText}>Generate</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.imageContainer}>
-        {isLoading ? (
-          // <Text style={styles.descriptionText}>Generating...</Text>
-          <Progress.Bar progress={progress} />
-        ) : image ? (
-          <Image
-            source={{uri: image.toString()}}
-            style={styles.image}
-            resizeMode="contain"
-          />
+    <>
+      <NavigationContainer>
+        {hideSplashScreen ? (
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              name="OnboardingS1"
+              component={OnboardingS1}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OnboardingS2"
+              component={OnboardingS2}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OnboardingS3"
+              component={OnboardingS3}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
         ) : null}
-      </View>
-    </SafeAreaView>
+      </NavigationContainer>
+    </>
   );
-}
+};
+export default App;
