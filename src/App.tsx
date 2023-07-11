@@ -10,7 +10,6 @@ import {
 import {handlePress} from './helpers/api';
 import {styles} from './styles/App';
 import * as Progress from 'react-native-progress';
-
 export const App: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);

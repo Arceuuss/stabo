@@ -49,10 +49,10 @@ jobs:
 
       - name: Install Pods
         run:  pod install --repo-update
- 
+     
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '13.0'
+          xcode-version: '13.2.1'
       
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.4.0
